@@ -39,7 +39,7 @@ log = None
 decode = None
 
 
-def find_git_repos(dirpath, excludes, depth, name_for_parent=1):
+def find_projects(dirpath, excludes, depth, name_for_parent=1):
     """Return list of directories containing a `.git` file or directory
 
     Results matching globbing patterns in `excludes` will be ignored.
@@ -89,7 +89,7 @@ def main(wf):
 
     global_excludes = wf.settings.get('global_exclude_patterns', [])
 
-    repos = []
+    projects = []
     result_objs = []  # For AsyncResults objects returned by `apply_async`
     pool = Pool(CONCURRENT_SEARCHES)
 
@@ -103,7 +103,7 @@ def main(wf):
             log.error(u'directory does not exist: %s', dirpath)
             continue
 
-        r = pool.apply_async(find_git_repos,
+        r = pool.apply_async(find_projects,
                              (dirpath, excludes, depth, name_for_parent))
         for re in r.get():
             log.info('    %r', re)
@@ -115,11 +115,11 @@ def main(wf):
 
     # Retrieve results
     for r in result_objs:
-        repos += r.get()
+        projects += r.get()
 
-    wf.cache_data('projects', repos)
+    wf.cache_data('projects', projects)
 
-    log.info('%d project(s) found in %0.2fs', len(repos), time() - start)
+    log.info('%d project(s) found in %0.2fs', len(projects), time() - start)
     log.info('update finished')
     [h.flush() for h in log.handlers]
 

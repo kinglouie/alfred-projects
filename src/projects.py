@@ -169,7 +169,7 @@ def get_apps():
     return apps
 
 
-def get_repos(opts):
+def get_projects(opts):
     """Load projects from cache, triggering an update if necessary.
 
     Args:
@@ -404,7 +404,7 @@ def main(wf):
         log.info('settings were updated. Reloading projects...')
         do_update()
 
-    projects = get_repos(opts)
+    projects = get_projects(opts)
 
     # Show appropriate warning/info message if there are no projects to
     # show/search
