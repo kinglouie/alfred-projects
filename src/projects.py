@@ -37,7 +37,7 @@ from workflow.background import is_running, run_in_background
 from workflow.update import Version
 
 
-# How often to check for new/updated repos
+# How often to check for new/updated projects
 DEFAULT_UPDATE_INTERVAL = 180  # minutes
 
 # GitHub repo for self-updating
@@ -181,18 +181,18 @@ def get_repos(opts):
     # Load data, update if necessary
     if not wf.cached_data_fresh('projects', max_age=opts.update_interval):
         do_update()
-    repos = wf.cached_data('projects', max_age=0)
+    projects = wf.cached_data('projects', max_age=0)
 
-    if not repos:
+    if not projects:
         do_update()
         return []
 
     # Check if cached data is old version
-    if isinstance(repos[0], basestring):
+    if isinstance(projects[0], basestring):
         do_update()
         return []
 
-    return repos
+    return projects
 
 
 def repo_url(path):
@@ -267,11 +267,11 @@ def do_update():
     return 0
 
 
-def do_search(repos, opts):
+def do_search(projects, opts):
     """Filter list of projects and show results in Alfred.
 
     Args:
-        repos (list): Sequence of ``Repo`` tuples.
+        projects (list): Sequence of ``Repo`` tuples.
         opts (AttrDict): CLI options.
 
     Returns:
@@ -289,13 +289,13 @@ def do_search(repos, opts):
             subtitles[modkey] = 'Open in {}'.format(join_english(apps[modkey]))
 
     if opts.query:
-        repos = wf.filter(opts.query, repos, lambda t: t[0], min_score=30)
-        log.info(u'%d/%d projects match `%s`', len(repos), len(repos), opts.query)
+        projects = wf.filter(opts.query, projects, lambda t: t[0], min_score=30)
+        log.info(u'%d/%d projects match `%s`', len(projects), len(projects), opts.query)
 
-    if not repos:
+    if not projects:
         wf.add_item('No matching projects found', icon=ICON_WARNING)
 
-    for r in repos:
+    for r in projects:
         log.debug(r)
         short_path = r.path.replace(os.environ['HOME'], '~')
         subtitle = u'{}  //  Open in {}'.format(short_path,
@@ -404,12 +404,12 @@ def main(wf):
         log.info('settings were updated. Reloading projects...')
         do_update()
 
-    repos = get_repos(opts)
+    projects = get_repos(opts)
 
     # Show appropriate warning/info message if there are no projects to
     # show/search
     # ------------------------------------------------------------------
-    if not repos:
+    if not projects:
         if is_running('update'):
             wf.add_item(u'Updating list of projects',
                         'Should be done in a few seconds',
@@ -426,7 +426,7 @@ def main(wf):
     if is_running('update'):
         wf.rerun = 0.5
 
-    return do_search(repos, opts)
+    return do_search(projects, opts)
 
 
 if __name__ == '__main__':
