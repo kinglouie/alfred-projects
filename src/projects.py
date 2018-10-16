@@ -82,7 +82,7 @@ DEFAULT_SETTINGS = {
 log = None
 
 
-Repo = namedtuple('Repo', 'name path')
+Project = namedtuple('Project', 'name path')
 
 
 class AttrDict(dict):
@@ -176,7 +176,7 @@ def get_projects(opts):
         opts (AttrDict): CLI options
 
     Returns:
-        list: Sequence of `Repo` tuples.
+        list: Sequence of `Project` tuples.
     """
     # Load data, update if necessary
     if not wf.cached_data_fresh('projects', max_age=opts.update_interval):
@@ -271,7 +271,7 @@ def do_search(projects, opts):
     """Filter list of projects and show results in Alfred.
 
     Args:
-        projects (list): Sequence of ``Repo`` tuples.
+        projects (list): Sequence of ``Project`` tuples.
         opts (AttrDict): CLI options.
 
     Returns:
@@ -416,7 +416,7 @@ def main(wf):
                         icon=ICON_INFO)
             wf.rerun = 0.5
         else:
-            wf.add_item('No git repos found',
+            wf.add_item('No projects found',
                         'Check your settings with `proettings`',
                         icon=ICON_WARNING)
         wf.send_feedback()

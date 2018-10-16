@@ -24,7 +24,7 @@ from multiprocessing.dummy import Pool
 
 from workflow import Workflow3
 
-from projects import Repo
+from projects import Project
 
 # How many search threads to run at the same time
 CONCURRENT_SEARCHES = 4
@@ -65,7 +65,7 @@ def find_projects(dirpath, excludes, depth, name_for_parent=1):
     results = []
     for filepath in output:
         name = os.path.basename(os.path.normpath(filepath))
-        results.append(Repo(name, filepath))
+        results.append(Project(name, filepath))
 
     log.debug(u'%d project(s) found in `%s` in %0.2fs', len(results), dirpath,
               time() - start)
