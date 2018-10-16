@@ -126,7 +126,7 @@ def settings_updated():
         bool: ``True`` if ``settings.json`` is newer than the repos cache.
 
     """
-    cache_age = wf.cached_data_age('repos')
+    cache_age = wf.cached_data_age('projects')
     settings_age = time.time() - os.stat(wf.settings_path).st_mtime
     log.debug('cache_age=%0.2f, settings_age=%0.2f', cache_age, settings_age)
     return settings_age < cache_age
@@ -179,9 +179,9 @@ def get_repos(opts):
         list: Sequence of `Repo` tuples.
     """
     # Load data, update if necessary
-    if not wf.cached_data_fresh('repos', max_age=opts.update_interval):
+    if not wf.cached_data_fresh('projects', max_age=opts.update_interval):
         do_update()
-    repos = wf.cached_data('repos', max_age=0)
+    repos = wf.cached_data('projects', max_age=0)
 
     if not repos:
         do_update()

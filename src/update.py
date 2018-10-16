@@ -117,7 +117,7 @@ def main(wf):
     for r in result_objs:
         repos += r.get()
 
-    wf.cache_data('repos', repos)
+    wf.cache_data('projects', repos)
 
     log.info('%d repo(s) found in %0.2fs', len(repos), time() - start)
     log.info('update finished')
