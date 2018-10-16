@@ -88,11 +88,11 @@
 	<key>createdby</key>
 	<string>Dean Jackson</string>
 	<key>description</key>
-	<string>Find and browse Git repositories</string>
+	<string>Find and browse Projects</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Git Repos</string>
+	<string>Projects</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -100,6 +100,8 @@
 			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
 				<key>argumenttrimmode</key>
 				<integer>0</integer>
 				<key>argumenttype</key>
@@ -107,7 +109,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>repos</string>
+				<string>pro</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -117,7 +119,7 @@
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>Loading list of repos…</string>
+				<string>Loading list of projects…</string>
 				<key>script</key>
 				<string>/usr/bin/python repos.py search "$1"</string>
 				<key>scriptargtype</key>
@@ -125,9 +127,9 @@
 				<key>scriptfile</key>
 				<string></string>
 				<key>subtext</key>
-				<string>View, Filter, Open Your Git Repositories</string>
+				<string>View, Filter, Open Your Projects</string>
 				<key>title</key>
-				<string>Git Repos</string>
+				<string>Projects</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
@@ -137,29 +139,6 @@
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>71820CCE-FF52-4077-B790-ACA80D174C54</string>
-			<key>version</key>
-			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>/usr/bin/python repos.py open $appkey "$1"</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>5</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>25B07D69-2EF2-420F-8B3B-0E7E7CA7B34F</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -183,6 +162,29 @@
 			<string>D2D75AF8-15E1-40D8-84D1-AE23BA5263F4</string>
 			<key>version</key>
 			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>/usr/bin/python repos.py open $appkey "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>5</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>25B07D69-2EF2-420F-8B3B-0E7E7CA7B34F</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -232,11 +234,11 @@ variables={allvars}</string>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
-				<string>reposettings</string>
+				<string>prosettings</string>
 				<key>subtext</key>
 				<string>Change search directories, exclude patterns</string>
 				<key>text</key>
-				<string>Edit Repo Settings</string>
+				<string>Edit Project Settings</string>
 				<key>withspace</key>
 				<false/>
 			</dict>
@@ -244,27 +246,6 @@ variables={allvars}</string>
 			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
 			<string>25BDF5B8-CC9C-444A-B35A-CD0ED5D35A84</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>keyword</key>
-				<string>reposhelp</string>
-				<key>subtext</key>
-				<string></string>
-				<key>text</key>
-				<string>Open Repos Help File</string>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.keyword</string>
-			<key>uid</key>
-			<string>13C4EEDF-EC8D-4B23-8693-6E050109AFDC</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -297,11 +278,32 @@ variables={allvars}</string>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
-				<string>reposupdate</string>
+				<string>prohelp</string>
 				<key>subtext</key>
 				<string></string>
 				<key>text</key>
-				<string>Update Git Repo Database</string>
+				<string>Open Projects Help File</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>13C4EEDF-EC8D-4B23-8693-6E050109AFDC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>prosupdate</string>
+				<key>subtext</key>
+				<string></string>
+				<key>text</key>
+				<string>Update Projects Database</string>
 				<key>withspace</key>
 				<false/>
 			</dict>
