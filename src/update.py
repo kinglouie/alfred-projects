@@ -24,7 +24,7 @@ from multiprocessing.dummy import Pool
 
 from workflow import Workflow3
 
-from repos import Repo
+from projects import Repo
 
 # How many search threads to run at the same time
 CONCURRENT_SEARCHES = 4
