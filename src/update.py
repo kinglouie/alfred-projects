@@ -8,7 +8,7 @@
 # Created on 2014-07-04
 #
 
-"""Update the cache of git repositories.
+"""Update the cache of projects.
 
 Uses settings from the workflow's `settings.json` file.
 """
@@ -67,7 +67,7 @@ def find_git_repos(dirpath, excludes, depth, name_for_parent=1):
         name = os.path.basename(os.path.normpath(filepath))
         results.append(Repo(name, filepath))
 
-    log.debug(u'%d repo(s) found in `%s` in %0.2fs', len(results), dirpath,
+    log.debug(u'%d project(s) found in `%s` in %0.2fs', len(results), dirpath,
               time() - start)
 
     for r in results:
@@ -119,7 +119,7 @@ def main(wf):
 
     wf.cache_data('projects', repos)
 
-    log.info('%d repo(s) found in %0.2fs', len(repos), time() - start)
+    log.info('%d project(s) found in %0.2fs', len(repos), time() - start)
     log.info('update finished')
     [h.flush() for h in log.handlers]
 

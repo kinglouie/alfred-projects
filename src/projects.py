@@ -8,15 +8,15 @@
 # Created on 2013-11-04
 #
 
-"""repos.py [command] [options] [<query>] [<path>]
+"""projects.py [command] [options] [<query>] [<path>]
 
-Find, open and search Git repos on your system.
+Find, open and search projects on your system.
 
 Usage:
-    repos.py search [<query>]
-    repos.py settings
-    repos.py update
-    repos.py open <appkey> <path>
+    projects.py search [<query>]
+    projects.py settings
+    projects.py update
+    projects.py open <appkey> <path>
 
 Options:
     -h, --help      Show this message
@@ -120,10 +120,10 @@ def migrate_v1_config():
 
 
 def settings_updated():
-    """Test whether settings file is newer than repos cache.
+    """Test whether settings file is newer than projects cache.
 
     Returns:
-        bool: ``True`` if ``settings.json`` is newer than the repos cache.
+        bool: ``True`` if ``settings.json`` is newer than the projects cache.
 
     """
     cache_age = wf.cached_data_age('projects')
@@ -170,7 +170,7 @@ def get_apps():
 
 
 def get_repos(opts):
-    """Load repos from cache, triggering an update if necessary.
+    """Load projects from cache, triggering an update if necessary.
 
     Args:
         opts (AttrDict): CLI options
@@ -211,7 +211,7 @@ def repo_url(path):
 
 
 def do_open(opts):
-    """Open repo in the specified application(s).
+    """Open project in the specified application(s).
 
     Args:
         opts (AttrDict): CLI options.
@@ -222,7 +222,7 @@ def do_open(opts):
     all_apps = get_apps()
     apps = all_apps.get(opts.appkey)
     if apps is None:
-        print('App {} not set. Use `reposettings`'.format(opts.appkey))
+        print('App {} not set. Use `proettings`'.format(opts.appkey))
         return 0
 
     if not isinstance(apps, list):
@@ -255,7 +255,7 @@ def do_settings():
 
 
 def do_update():
-    """Update cached list of git repos.
+    """Update cached list of projects.
 
     Args:
         opts (AttrDict): CLI options.
@@ -268,7 +268,7 @@ def do_update():
 
 
 def do_search(repos, opts):
-    """Filter list of repos and show results in Alfred.
+    """Filter list of projects and show results in Alfred.
 
     Args:
         repos (list): Sequence of ``Repo`` tuples.
@@ -284,16 +284,16 @@ def do_search(repos, opts):
     for modkey in MODIFIERS:
         if not apps.get('app_' + modkey):
             subtitles[modkey] = ('App ' + modkey + ' not set. '
-                                 'Use `reposettings` to set it.')
+                                 'Use `prosettings` to set it.')
         else:
             subtitles[modkey] = 'Open in {}'.format(join_english(apps[modkey]))
 
     if opts.query:
         repos = wf.filter(opts.query, repos, lambda t: t[0], min_score=30)
-        log.info(u'%d/%d repos match `%s`', len(repos), len(repos), opts.query)
+        log.info(u'%d/%d projects match `%s`', len(repos), len(repos), opts.query)
 
     if not repos:
-        wf.add_item('No matching repos found', icon=ICON_WARNING)
+        wf.add_item('No matching projects found', icon=ICON_WARNING)
 
     for r in repos:
         log.debug(r)
@@ -315,7 +315,7 @@ def do_search(repos, opts):
             app = apps.get(modkey)
             if not app:
                 subtitle = ('App ' + modkey + ' not set. '
-                            'Use `reposettings` to set it.')
+                            'Use `proettings` to set it.')
                 valid = False
             else:
                 subtitle = u'Open in {}'.format(join_english(app))
@@ -387,37 +387,37 @@ def main(wf):
                     autocomplete='workflow:update',
                     icon=ICON_UPDATE)
 
-    # Try to search git repos
+    # Try to search projects
     # ------------------------------------------------------------------
     search_dirs = wf.settings.get('search_dirs', [])
 
     # Can't do anything with no directories to search
     if not search_dirs or wf.settings == DEFAULT_SETTINGS:
         wf.add_item("You haven't configured any directories to search",
-                    'Use `reposettings` to edit your configuration',
+                    'Use `proettings` to edit your configuration',
                     icon=ICON_WARNING)
         wf.send_feedback()
         return 0
 
-    # Reload repos if settings file has been updated
+    # Reload projects if settings file has been updated
     if settings_updated():
-        log.info('settings were updated. Reloading repos...')
+        log.info('settings were updated. Reloading projects...')
         do_update()
 
     repos = get_repos(opts)
 
-    # Show appropriate warning/info message if there are no repos to
+    # Show appropriate warning/info message if there are no projects to
     # show/search
     # ------------------------------------------------------------------
     if not repos:
         if is_running('update'):
-            wf.add_item(u'Updating list of repos…',
+            wf.add_item(u'Updating list of projects',
                         'Should be done in a few seconds',
                         icon=ICON_INFO)
             wf.rerun = 0.5
         else:
             wf.add_item('No git repos found',
-                        'Check your settings with `reposettings`',
+                        'Check your settings with `proettings`',
                         icon=ICON_WARNING)
         wf.send_feedback()
         return 0
