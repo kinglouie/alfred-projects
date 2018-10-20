@@ -41,10 +41,10 @@ from workflow.update import Version
 DEFAULT_UPDATE_INTERVAL = 180  # minutes
 
 # GitHub repo for self-updating
-UPDATE_SETTINGS = {'github_slug': 'deanishe/alfred-repos'}
+UPDATE_SETTINGS = {'github_slug': 'kinglouie/alfred-projects'}
 
 # GitHub Issues
-HELP_URL = 'https://github.com/deanishe/alfred-repos/issues'
+HELP_URL = 'https://github.com/kinglouie/alfred-projects/issues'
 
 # Icon shown if a newer version is available
 ICON_UPDATE = 'update-available.png'
