@@ -95,30 +95,6 @@ class AttrDict(dict):
         self.__dict__ = self
 
 
-def migrate_v1_config():
-    """Replace v1 format in settings with v2 format.
-
-    Change numbered apps to named apps.
-    """
-    log.debug('migrating v1 config to v2 ...')
-    newkeys = {
-        '1': 'default',
-        '2': 'cmd',
-        '3': 'alt',
-        '4': 'ctrl',
-        '5': 'shift',
-        '6': 'fn',
-    }
-    for k, nk in newkeys.items():
-        v = wf.settings.get('app_' + k)
-        wf.settings['app_' + nk] = v
-        try:
-            del wf.settings['app_' + k]
-            log.debug('changed `app_%s` to `app_%s`', k, nk)
-        except KeyError:
-            pass
-
-
 def settings_updated():
     """Test whether settings file is newer than projects cache.
 
@@ -360,9 +336,6 @@ def parse_args():
 
 def main(wf):
     """Run the workflow."""
-    # Update settings format
-    if wf.last_version_run < Version('2'):
-        migrate_v1_config()
 
     opts = parse_args()
 
