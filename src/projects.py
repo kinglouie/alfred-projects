@@ -198,7 +198,7 @@ def do_open(opts):
     all_apps = get_apps()
     apps = all_apps.get(opts.appkey)
     if apps is None:
-        print('App {} not set. Use `proettings`'.format(opts.appkey))
+        print('App {} not set. Use `prosettings`'.format(opts.appkey))
         return 0
 
     if not isinstance(apps, list):
