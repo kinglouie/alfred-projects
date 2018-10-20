@@ -65,7 +65,7 @@ def find_projects(dirpath, excludes, depth, name_for_parent=1):
     results = []
     for filepath in output:
         name = os.path.basename(os.path.normpath(filepath))
-        results.append(Project(name, filepath))
+        results.append(Project(name, filepath, "Project"))
 
     log.debug(u'%d project(s) found in `%s` in %0.2fs', len(results), dirpath,
               time() - start)

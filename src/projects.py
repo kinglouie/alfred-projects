@@ -82,7 +82,7 @@ DEFAULT_SETTINGS = {
 log = None
 
 
-Project = namedtuple('Project', 'name path')
+Project = namedtuple('Project', ['name', 'path', 'type'])
 
 
 class AttrDict(dict):
