@@ -46,8 +46,13 @@ UPDATE_SETTINGS = {'github_slug': 'kinglouie/alfred-projects'}
 # GitHub Issues
 HELP_URL = 'https://github.com/kinglouie/alfred-projects/issues'
 
-# Icon shown if a newer version is available
-ICON_UPDATE = 'update-available.png'
+# Icons
+ICONS = {
+    'update': 'update-available.png',
+    'project': 'project_folder.png',
+    'project_repository': 'project_repository_folder.png',
+    'repository': 'icon.png'
+}
 
 # Available modifier keys
 MODIFIERS = ('cmd', 'alt', 'ctrl', 'shift', 'fn')
@@ -212,6 +217,9 @@ def do_open(opts):
                 subprocess.call(['open', url])
             else:
                 subprocess.call(['open', '-a', app, url])
+        elif app == "Sublime Text":
+            log.info('opening %s with %s ...', opts.path, app)
+            subprocess.call(['/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl', opts.path])
         else:
             log.info('opening %s with %s ...', opts.path, app)
             subprocess.call(['open', '-a', app, opts.path])
@@ -276,6 +284,7 @@ def do_search(projects, opts):
         short_path = r.path.replace(os.environ['HOME'], '~')
         subtitle = u'{}  //  Open in {}'.format(short_path,
                                                 join_english(apps['default']))
+
         it = wf.add_item(
             r.name,
             subtitle,
@@ -283,7 +292,7 @@ def do_search(projects, opts):
             uid=r.path,
             valid=True,
             type='file',
-            icon='icon.png'
+            icon=ICONS[r.type]
         )
         it.setvar('appkey', 'default')
 
@@ -291,7 +300,7 @@ def do_search(projects, opts):
             app = apps.get(modkey)
             if not app:
                 subtitle = ('App ' + modkey + ' not set. '
-                            'Use `proettings` to set it.')
+                            'Use `prosettings` to set it.')
                 valid = False
             else:
                 subtitle = u'Open in {}'.format(join_english(app))
@@ -358,7 +367,7 @@ def main(wf):
         wf.add_item(u'Version {} is available'.format(v),
                     u'↩ or ⇥ to install',
                     autocomplete='workflow:update',
-                    icon=ICON_UPDATE)
+                    icon=ICONS['update'])
 
     # Try to search projects
     # ------------------------------------------------------------------
@@ -367,7 +376,7 @@ def main(wf):
     # Can't do anything with no directories to search
     if not search_dirs or wf.settings == DEFAULT_SETTINGS:
         wf.add_item("You haven't configured any directories to search",
-                    'Use `proettings` to edit your configuration',
+                    'Use `prosettings` to edit your configuration',
                     icon=ICON_WARNING)
         wf.send_feedback()
         return 0
@@ -390,7 +399,7 @@ def main(wf):
             wf.rerun = 0.5
         else:
             wf.add_item('No projects found',
-                        'Check your settings with `proettings`',
+                        'Check your settings with `prosettings`',
                         icon=ICON_WARNING)
         wf.send_feedback()
         return 0

@@ -53,19 +53,42 @@ def find_projects(dirpath, excludes, depth, name_for_parent=1):
     """
     start = time()
 
-    cmd = ['find', '-L', dirpath,
+    cmdFindProjects = ['find', '-L', dirpath,
            '-type', 'd',
            '-not', '-name', '".*"',
            '-depth', str(depth)]
 
-    output = subprocess.check_output(cmd)
-    output = [s.strip() for s in decode(output).split('\n')
-              if s.strip()]
+    output = subprocess.check_output(cmdFindProjects)
+    output = [s.strip() for s in decode(output).split('\n') if s.strip()]
 
     results = []
     for filepath in output:
+        project_is_repo = False
+        components = filepath.rstrip('/').split('/')
         name = os.path.basename(os.path.normpath(filepath))
-        results.append(Project(name, filepath, "Project"))
+
+        # search sub repos
+        cmdFindRepos = ['find', '-L', filepath,
+                '-name', '.git',
+                '-maxdepth', '3']
+
+        output2 = subprocess.check_output(cmdFindRepos)
+        output2 = [os.path.dirname(s.strip()) for s in decode(output2).split('\n')
+              if s.strip()]
+
+        for filepath2 in output2:
+            components2 = filepath2.rstrip('/').split('/')
+            components_diff = components2[len(components):]
+            name2 = name+"/"+"/".join(components_diff)#components2[-1]
+            if filepath == filepath2:
+                project_is_repo = True
+            else:
+                results.append(Project(name2, filepath2, "repository"))
+
+        # add Project
+        results.append(Project(name, filepath, "project" if not project_is_repo else "project_repository" ))
+
+
 
     log.debug(u'%d project(s) found in `%s` in %0.2fs', len(results), dirpath,
               time() - start)
@@ -105,8 +128,6 @@ def main(wf):
 
         r = pool.apply_async(find_projects,
                              (dirpath, excludes, depth, name_for_parent))
-        for re in r.get():
-            log.info('    %r', re)
         result_objs.append(r)
 
     # Close the pool and wait for it to finish
@@ -116,6 +137,9 @@ def main(wf):
     # Retrieve results
     for r in result_objs:
         projects += r.get()
+
+    for p in projects:
+        log.info(p)
 
     wf.cache_data('projects', projects)
 
