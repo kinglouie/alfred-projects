@@ -280,7 +280,6 @@ def do_search(projects, opts):
         wf.add_item('No matching projects found', icon=ICON_WARNING)
 
     for r in projects:
-        log.debug(r)
         short_path = r.path.replace(os.environ['HOME'], '~')
         subtitle = u'{}  //  Open in {}'.format(short_path,
                                                 join_english(apps['default']))
